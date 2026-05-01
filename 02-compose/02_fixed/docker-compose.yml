@@ -1,0 +1,34 @@
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: 01-docker/02_multistage/Dockerfile
+    image: goose:compose
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      PORT: "8080"
+      READY_DELAY_MS: "0"
+      DB_HOST: postgres
+      DB_PORT: "5432"
+    ports:
+      - "28080:8080"
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: goose
+      POSTGRES_PASSWORD: goose
+      POSTGRES_DB: goose
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U goose -d goose"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+      start_period: 2s
+
+  redis:
+    image: redis:7-alpine

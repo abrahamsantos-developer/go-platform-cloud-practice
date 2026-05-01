@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goose
+  namespace: goose
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: goose
+  template:
+    metadata:
+      labels:
+        app: goose
+    spec:
+      containers:
+        - name: goose
+          image: goose:multi
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            periodSeconds: 2
+            timeoutSeconds: 1
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi

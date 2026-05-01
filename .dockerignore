@@ -1,0 +1,35 @@
+# Lo que NUNCA queremos meter en el build context.
+# Estilo: el .dockerignore es como .gitignore pero para Docker.
+
+# Control de versiones
+.git
+.gitignore
+
+# Editor / IDE
+.vscode
+.idea
+*.swp
+.DS_Store
+
+# Build outputs locales (no queremos que entren binarios pre-compilados)
+bin/
+dist/
+*.exe
+*.test
+*.out
+
+# Logs y temporales
+*.log
+tmp/
+
+# Secrets — la línea más crítica. NUNCA en una imagen.
+.env
+.env.*
+*.pem
+*.key
+secrets/
+
+# Documentación / archivos de README innecesarios en runtime
+README.md
+docs/
+*.md

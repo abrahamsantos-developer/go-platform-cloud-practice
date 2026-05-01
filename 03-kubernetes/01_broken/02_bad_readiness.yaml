@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goose-bad-readiness
+  namespace: goose
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: goose-bad-readiness
+  template:
+    metadata:
+      labels:
+        app: goose-bad-readiness
+    spec:
+      containers:
+        - name: goose
+          image: goose:multi
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /not-ready
+              port: 8080
+            periodSeconds: 2
+            timeoutSeconds: 1
+            failureThreshold: 2
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: goose-bad-readiness
+  namespace: goose
+spec:
+  selector:
+    app: goose-bad-readiness
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080

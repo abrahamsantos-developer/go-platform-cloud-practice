@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: goose
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goose-pending
+  namespace: goose
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: goose-pending
+  template:
+    metadata:
+      labels:
+        app: goose-pending
+    spec:
+      containers:
+        - name: goose
+          image: goose:multi
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "100"
+              memory: 100Gi
+            limits:
+              cpu: "100"
+              memory: 100Gi

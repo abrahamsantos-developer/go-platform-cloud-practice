@@ -1,0 +1,41 @@
+stages:
+  - lint
+  - test
+  - build
+  - deploy
+
+lint:
+  stage: lint
+  script:
+    - cd 05-cicd/02_fixed/fixture
+    - golangci-lint run ./...
+
+test:
+  stage: test
+  script:
+    - cd 05-cicd/02_fixed/fixture
+    - go test -race ./...
+
+build:
+  stage: build
+  script:
+    - docker build -f 01-docker/02_multistage/Dockerfile -t goose:$CI_COMMIT_SHA .
+  only:
+    - main
+
+deploy-staging:
+  stage: deploy
+  script:
+    - helm template goose 04-helm/02_fixed/chart -f 04-helm/02_fixed/chart/values/staging.yaml --set image.tag=$CI_COMMIT_SHA >/tmp/goose-rendered.yaml
+  environment: staging
+  only:
+    - main
+
+deploy-prod:
+  stage: deploy
+  script:
+    - helm template goose 04-helm/02_fixed/chart -f 04-helm/02_fixed/chart/values/prod.yaml --set image.tag=$CI_COMMIT_SHA >/tmp/goose-rendered-prod.yaml
+  when: manual
+  environment: production
+  only:
+    - main
