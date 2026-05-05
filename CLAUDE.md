@@ -109,7 +109,7 @@ Lleva esta tabla actualizada al final de cada sesión, en este mismo archivo, de
 
 | Módulo | Roto entendido | Fix entendido | Roto de nuevo por mí | Versión entrevista OK |
 |--------|---------------|---------------|----------------------|-----------------------|
-| 01 Docker        | [ ] | [ ] | [ ] | [ ] |
+| 01 Docker        | [x] | [x] | [x] | [x] |
 | 02 Compose       | [ ] | [ ] | [ ] | [ ] |
 | 03 Kubernetes    | [ ] | [ ] | [ ] | [ ] |
 | 04 Helm          | [ ] | [ ] | [ ] | [ ] |
@@ -124,4 +124,4 @@ Lleva esta tabla actualizada al final de cada sesión, en este mismo archivo, de
 
 > Cada sesión añade una entrada corta: fecha, módulo, qué rompimos, qué aprendí, qué quedó pendiente.
 
-- _vacío — empezar aquí_
+- 2026-05-05 · Módulo 01 Docker · Comparamos naive (932MB) vs multistage (6MB). Aprendimos CGO_ENABLED=0, scratch, layer caching. Intentamos romper quitando CGO_ENABLED=0 — no crasheó porque el servicio es pure Go stdlib sin dependencias CGO; en un servicio real con drivers de DB o libs C sí crashearía. Versión entrevista OK.
